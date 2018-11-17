@@ -2,6 +2,7 @@
 
 MAVEN:
 
+```xml
 <repositories>
     <repository>
         <id>jitpack.io</id>
@@ -14,3 +15,4 @@ MAVEN:
     <artifactId>gettextCommons</artifactId>
     <version>1.0</version>
 </dependency>
+```
