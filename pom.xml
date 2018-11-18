@@ -6,7 +6,9 @@
 
     <groupId>ru.villex</groupId>
     <artifactId>gettext-commons</artifactId>
-    <version>1.0-RELEASE</version>
+    <version>2.0-RELEASE</version>
+    <dependencies>
+    </dependencies>
 
     <properties>
         <github.maven-plugin>0.9</github.maven-plugin>
@@ -31,29 +33,6 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
-
-            <!--<plugin>-->
-                <!--<groupId>com.github.github</groupId>-->
-                <!--<artifactId>site-maven-plugin</artifactId>-->
-                <!--<version>${github.maven-plugin}</version>-->
-                <!--<configuration>-->
-                    <!--<message>Maven artifacts for ${project.version}</message>-->
-                    <!--<noJekyll>true</noJekyll>-->
-                    <!--<outputDirectory>${project.build.directory}/mvn-repo</outputDirectory>-->
-                    <!--<branch>refs/heads/mvn-repo</branch>-->
-                    <!--<includes><include>**/*</include></includes>-->
-                    <!--<repositoryName>gettextCommons</repositoryName>-->
-                    <!--<repositoryOwner>maozzz</repositoryOwner>-->
-                <!--</configuration>-->
-                <!--<executions>-->
-                    <!--<execution>-->
-                        <!--<goals>-->
-                            <!--<goal>site</goal>-->
-                        <!--</goals>-->
-                        <!--<phase>deploy</phase>-->
-                    <!--</execution>-->
-                <!--</executions>-->
-            <!--</plugin>-->
         </plugins>
     </build>
 

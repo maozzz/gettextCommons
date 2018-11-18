@@ -2,6 +2,7 @@ package ru.villex.gettext;
 
 import java.text.MessageFormat;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -21,8 +22,10 @@ public class Gettext implements Gettextable {
 
     }
 
-    public void setBundles(Map<Locale, GettextResourceBundle> bundles) {
-        this.bundles = bundles;
+    public void setBundles(List<GettextResourceBundle> bundles) {
+        for (GettextResourceBundle bundle : bundles) {
+            this.bundles.put(bundle.getLocale(), bundle);
+        }
     }
 
     public boolean isUseMessageFormat() {
@@ -52,16 +55,26 @@ public class Gettext implements Gettextable {
 
     @Override
     public String _n(Locale locale, String key, long num, Object... args) {
+        return _n(locale, new String[]{key}, num, args);
+    }
+
+    @Override
+    public String _n(Locale locale, String key, String plural, long num, Object... args) {
+        return _n(locale, new String[]{key, plural}, num, args);
+    }
+
+    @Override
+    public String _n(Locale locale, String[] forms, long num, Object... args) {
         GettextResourceBundle bundle = bundles.get(locale);
         // @TODO сделать дефолтную локаль
-        String tr = bundle.plural(key, num);
+        String tr = bundle.plural(num, forms);
         if (args.length == 0) {
             args = new Object[]{num};
         }
         if (useMessageFormat) {
             return MessageFormat.format(tr, args);
         } else {
-                return String.format(tr, args);
+            return String.format(tr, args);
         }
     }
 }

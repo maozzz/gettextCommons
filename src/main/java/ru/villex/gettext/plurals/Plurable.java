@@ -6,6 +6,6 @@ package ru.villex.gettext.plurals;
  * Date: 16.11.2018
  * Time: 18:29
  */
-public interface PluralAble {
+public interface Plurable {
     int pluralEval(long n);
 }

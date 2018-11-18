@@ -1,11 +1,13 @@
 package ru.villex.gettext;
 
-import ru.villex.gettext.plurals.PluralAble;
+import ru.villex.gettext.plurals.Plurable;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Locale;
 import java.util.ResourceBundle;
+
+import static ru.villex.gettext.plurals.ExpressionPlurable.generatePlurableClass;
 
 /**
  * Created by Alexey Matukhin.
@@ -14,25 +16,35 @@ import java.util.ResourceBundle;
  * Time: 15:21
  */
 public class GettextResourceBundle extends ResourceBundle implements GettextableResourceBundle {
-    private final Locale locale;
-    private PluralAble pluralAble;
+    private Locale locale;
+    private Plurable plurable;
 
-    private Hashtable<String, Entry> table = new Hashtable<>();
+    private Hashtable<String, String[]> table = new Hashtable<>();
 
-    private String header;
+    private String[] headers;
+    private Hashtable<String, String> meta = new Hashtable<>();
+    private String language;
+    private String plural;
 
-    public GettextResourceBundle(Iterable<Entry> entries, Locale locale, PluralAble pluralAble) {
-        setEntries(entries);
+    public GettextResourceBundle(Iterable<Entry> entries) {
+        this(entries, null);
+    }
+
+    public GettextResourceBundle(Iterable<Entry> entries, Locale locale) {
+        this(entries, locale, null);
+    }
+
+    public GettextResourceBundle(Iterable<Entry> entries, Locale locale, Plurable plurable) {
         this.locale = locale;
-        setPluralAble(pluralAble);
+        setPlurable(plurable);
+        setEntries(entries);
     }
 
     @Override
     protected Object handleGetObject(String key) {
-        Entry entry = table.get(key);
-        if (entry == null) return entry;
-        String[] tr = entry.getTr();
-        return tr.length > 0 ? tr[0] : null;
+        String[] trs = table.get(key);
+        if (trs == null) return null;
+        return trs.length > 0 ? trs[0] : null;
     }
 
     @Override
@@ -42,34 +54,72 @@ public class GettextResourceBundle extends ResourceBundle implements Gettextable
 
     @Override
     public int pluralEval(long n) {
-        return pluralAble.pluralEval(n);
+        return plurable.pluralEval(n);
     }
 
     @Override
     public Object lookup(String key) {
-        String[] tr = table.get(key).getTr();
+        String[] tr = table.get(key);
         return tr.length == 1 ? tr[0] : tr.length > 1 ? tr : "";
     }
 
     @Override
-    public String plural(String key, long num) {
-        Entry entry = table.get(key);
-        if (entry == null) return key;
-        return entry.getTr()[pluralEval(num)];
+    public String plural(long num, String... forms) {
+        try {
+            String[] trs = table.get(forms[0]);
+            if (trs == null) trs = forms;
+            String s = trs[pluralEval(num)];
+            return s;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return forms[0];
+        }
     }
 
     public void setEntries(Iterable<Entry> entries) {
         table.clear();
         for (Entry entry : entries) {
             if (entry.getKey() != null) {
-                table.put(entry.getKey()[0], entry);
+                table.put(entry.getKey()[0], entry.getTr());
             } else {
-                header = entry.getTr()[0];
+                parseHeaders(entry.getTr()[0]);
             }
         }
     }
 
-    private void setPluralAble(PluralAble pluralAble) {
-        this.pluralAble = pluralAble;
+    @Override
+    public Locale getLocale() {
+        return locale;
+    }
+
+    private void parseHeaders(String s) {
+        headers = s.split("\n");
+        for (String header : headers) {
+            String[] split = header.split(":");
+            if (split.length > 1) {
+                meta.put(split[0].trim(), split[1].trim());
+                if (split[0].toLowerCase().equals("language")) {
+                    language = split[1].trim();
+                    if (locale == null) {
+                        locale = Locale.forLanguageTag(language);
+                    }
+                }
+                if (split[0].toLowerCase().equals("plural-forms")) {
+                    int i = header.toLowerCase().indexOf("plural=");
+                    if (i != 0) {
+                        plural = header.substring(i, header.length()).replace("plural=", "");
+                        if (plurable == null) {
+//                            plurable = new ExpressionPlurable(plural);
+                            plurable = generatePlurableClass(plural);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+    private void setPlurable(Plurable plurable) {
+        this.plurable = plurable;
     }
 }
