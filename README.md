@@ -1,3 +1,6 @@
+![Release](https://jitpack.io/v/maozzz/gettextCommons.svg)
+
+
 # Maven
 
 ```xml
