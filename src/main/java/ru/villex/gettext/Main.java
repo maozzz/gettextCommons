@@ -21,7 +21,7 @@ public class Main {
     public static void main(String[] args) throws IOException {
 
 //        fromFile();
-        String[] locales = {"en", "it", "ru"};
+        String[] locales = {"en", "el", "ru"};
 
         List<GettextResourceBundle> bundles = new ArrayList<>();
         for (String locale : locales) {
