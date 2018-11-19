@@ -33,12 +33,12 @@ List<Entry> entries = moParser.read(is);
 Locale ru = Locale.forLanguageTag("ru");
 resources.put(ru, new GettextResourceBundle(entries, ru, new PluralAbleRu()));
 
-// set up Gettext object for translate
-Gettext gettext = new Gettext();
-gettext.setBundles(resources);
+GettextTranslator
+Gettext gettextTranslator = new Gettext();
+gettextTranslator.setBundles(resources);
 
-System.out.println(gettext._(ru, "About"));
-System.out.println(gettext._n(new Locale("ru"), "%s photo", 17L));
+System.out.println(gettextTranslator._(ru, "About"));
+System.out.println(gettextTranslator._n(new Locale("ru"), "%s photo", 17L));
 ```
 
 will printed:
@@ -48,7 +48,7 @@ will printed:
 17 фотографий
 ```
 
-# gettext doc
-http://www.gnu.org/software/gettext/manual/gettext.pdf
+# gettextTranslator doc
+http://www.gnu.org/software/gettextTranslator/manual/gettextTranslator.pdf
 
 !!! page 113 for more details

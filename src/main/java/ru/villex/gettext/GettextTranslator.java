@@ -12,13 +12,13 @@ import java.util.Map;
  * Date: 16.11.2018
  * Time: 19:29
  */
-public class Gettext implements Gettextable {
+public class GettextTranslator implements Gettextable {
 
     private boolean useMessageFormat = false;
 
     Map<Locale, GettextResourceBundle> bundles = new Hashtable<>();
 
-    public Gettext() {
+    public GettextTranslator() {
 
     }
 

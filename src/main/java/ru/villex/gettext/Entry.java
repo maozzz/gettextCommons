@@ -6,8 +6,7 @@ package ru.villex.gettext;
  * Date: 16.11.2018
  * Time: 17:36
  */
-
-class Entry {
+public class Entry {
     private int keyPos;
     private int keyLen;
     private int trPos;

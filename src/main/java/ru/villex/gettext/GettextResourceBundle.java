@@ -58,12 +58,6 @@ public class GettextResourceBundle extends ResourceBundle implements Gettextable
     }
 
     @Override
-    public Object lookup(String key) {
-        String[] tr = table.get(key);
-        return tr.length == 1 ? tr[0] : tr.length > 1 ? tr : "";
-    }
-
-    @Override
     public String plural(long num, String... forms) {
         try {
             String[] trs = table.get(forms[0]);
@@ -109,7 +103,6 @@ public class GettextResourceBundle extends ResourceBundle implements Gettextable
                     if (i != 0) {
                         plural = header.substring(i, header.length()).replace("plural=", "");
                         if (plurable == null) {
-//                            plurable = new ExpressionPlurable(plural);
                             plurable = generatePlurableClass(plural);
                         }
                     }

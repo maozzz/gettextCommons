@@ -9,8 +9,5 @@ import ru.villex.gettext.plurals.Plurable;
  * Time: 15:22
  */
 public interface GettextableResourceBundle extends Plurable {
-
-    Object lookup(String msgid);
-
     String plural(long num, String... forms);
 }

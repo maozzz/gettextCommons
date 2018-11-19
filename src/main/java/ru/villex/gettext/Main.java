@@ -20,7 +20,7 @@ import java.util.Locale;
 public class Main {
     public static void main(String[] args) throws IOException {
 
-        fromFile();
+//        fromFile();
         String[] locales = {"en", "it", "ru"};
 
         List<GettextResourceBundle> bundles = new ArrayList<>();
@@ -34,24 +34,24 @@ public class Main {
             GettextResourceBundle bundle = new GettextResourceBundle(entries);
             bundles.add(bundle);
         }
-        Gettext gettext = new Gettext();
-        gettext.setBundles(bundles);
-        System.out.println(gettext._n(new Locale("ru"), "%s photo", 0L));
-        System.out.println(gettext._n(new Locale("en"), "%s photo", "%s photos", 0L));
-        System.out.println(gettext._n(new Locale("it"), "%s photo", 0L));
-        System.out.println(gettext._n(new Locale("ru"), "%s photo", 1L, 1));
-        System.out.println(gettext._n(new Locale("ru"), "%s photo", 2L, "2"));
-        System.out.println(gettext._n(new Locale("it"), "%s photo", 4L, "four"));
-        System.out.println(gettext._n(new Locale("en"), "%s photo", "%s photos", 17L));
-        System.out.println(gettext._n(new Locale("ru"), "%s photo", 21L, 21));
+        GettextTranslator gettextTranslator = new GettextTranslator();
+        gettextTranslator.setBundles(bundles);
+        System.out.println(gettextTranslator._n(new Locale("ru"), "%s photo", 0L));
+        System.out.println(gettextTranslator._n(new Locale("en"), "%s photo", "%s photos", 0L));
+        System.out.println(gettextTranslator._n(new Locale("it"), "%s photo", 0L));
+        System.out.println(gettextTranslator._n(new Locale("ru"), "%s photo", 1L, 1));
+        System.out.println(gettextTranslator._n(new Locale("ru"), "%s photo", 2L, "2"));
+        System.out.println(gettextTranslator._n(new Locale("it"), "%s photo", 4L, "four"));
+        System.out.println(gettextTranslator._n(new Locale("en"), "%s photo", "%s photos", 17L));
+        System.out.println(gettextTranslator._n(new Locale("ru"), "%s photo", 21L, 21));
 
         long start = System.currentTimeMillis();
         Locale ru = new Locale("ru");
         for (int i=0; i<1000000; i++) {
-            gettext._n(ru, "%s photo", 0L);
+            gettextTranslator._n(ru, "%s photo", 0L);
         }
         System.out.println(System.currentTimeMillis() - start);
-        String about = gettext._(Locale.ITALIAN, "About");
+        String about = gettextTranslator._(Locale.ITALIAN, "About");
         System.out.println(about);
     }
 
@@ -67,10 +67,10 @@ public class Main {
         Locale ru = Locale.forLanguageTag("ru");
         resources.add(new GettextResourceBundle(entries));
 
-        Gettext gettext = new Gettext();
-        gettext.setBundles(resources);
+        GettextTranslator gettextTranslator = new GettextTranslator();
+        gettextTranslator.setBundles(resources);
 
-        System.out.println(gettext._(ru, "About"));
-        System.out.println(gettext._n(new Locale("ru"), "%s photo", 17L));
+        System.out.println(gettextTranslator._(ru, "About"));
+        System.out.println(gettextTranslator._n(new Locale("ru"), "%s photo", 17L));
     }
 }
