@@ -28,6 +28,10 @@ public class GettextTranslator implements Gettextable {
         }
     }
 
+    public void addBundle(GettextResourceBundle bundle) {
+        this.bundles.put(bundle.getLocale(), bundle);
+    }
+
     public boolean isUseMessageFormat() {
         return useMessageFormat;
     }
