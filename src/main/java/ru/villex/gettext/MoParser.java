@@ -36,7 +36,7 @@ public class MoParser {
     private LinkedList<Entry> entries = new LinkedList<Entry>();
 
 
-    public List<Entry> read(InputStream inputStream) throws IOException {
+    public synchronized List<Entry> read(InputStream inputStream) throws IOException {
         entries = new LinkedList<>();
         try {
             // парсим заголовочные данные
