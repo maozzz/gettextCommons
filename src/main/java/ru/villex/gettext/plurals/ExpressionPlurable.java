@@ -40,10 +40,9 @@ public class ExpressionPlurable implements Plurable {
     }
 
 
-    public static synchronized Plurable generatePlurableClass(String expression) {
+    public static Plurable generatePlurableClass(String expression) {
 
         try {
-            String prefix = new Long(System.nanoTime()).toString();
             String className = "Plurable";
             // create an empty source file
             File sourceFile = File.createTempFile(className, ".java");
@@ -75,7 +74,7 @@ public class ExpressionPlurable implements Plurable {
             URLClassLoader classLoader = URLClassLoader.newInstance(new URL[]{parentDirectory.toURI().toURL()});
             Class<?> plurable = classLoader.loadClass(className);
 
-            // call a method on the loaded class
+            // return instance
             return (Plurable) plurable.newInstance();
         } catch (Exception ex) {
             Logger.getLogger(ExpressionPlurable.class.getSimpleName()).severe(ex.getMessage());
