@@ -18,6 +18,25 @@
 </dependency>
 ```
 
+
+# Gradle
+    
+```groovy
+
+allprojects {
+    repositories {
+        ...
+        maven { url 'https://jitpack.io' }
+    }
+}
+```
+
+```groovy
+dependencies {
+	   implementation 'com.github.maozzz:gettextCommons:x.x.x'
+}
+```
+
 # Usage
 
 ```java
