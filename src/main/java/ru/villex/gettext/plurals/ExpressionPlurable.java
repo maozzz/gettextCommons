@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Arrays;
+import java.util.logging.Logger;
 
 /**
  * Created by Alexey Matukhin.
@@ -77,7 +78,7 @@ public class ExpressionPlurable implements Plurable {
             // call a method on the loaded class
             return (Plurable) plurable.newInstance();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            Logger.getLogger(ExpressionPlurable.class.getSimpleName()).severe(ex.getMessage());
             return new ExpressionPlurable(expression);
         }
     }
