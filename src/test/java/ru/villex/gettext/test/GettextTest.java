@@ -36,7 +36,7 @@ public class GettextTest extends TestCase {
             GettextResourceBundle bundle = new GettextResourceBundle(parser.read(res));
             translator.addBundle(bundle);
         }
-        String t = translator._(ru, "About us");
+        String t = translator._(ru.getLanguage(), "About us");
         assertEquals(t, "О нас");
         t = translator._n(ru, "Buying Pro for %s year", 5L);
         System.out.println(t);
@@ -47,7 +47,7 @@ public class GettextTest extends TestCase {
         t = translator._n(ru, "Discover <a href=\"%s\">%s more wedding photographer</a> or <a %s>create</a> the Photographer Wanted Ad", 21L, "https://ya.ru", 21, "https://google.com");
         System.out.println(t);
         assertEquals(t, "Посмотреть еще <a href=\"https://ya.ru\">21 фотографа на свадьбу</a> или <a https://google.com>оставить объявление</a> о поиске фотографа");
-        t = translator._n(ru, "message", 21);
+        t = translator._n("ru", "message", 21);
         System.out.println(t);
         assertEquals(t, "сообщение");
         t = translator._n(ru, "If you complete the next %1$s step we will add you %2$s rating points for it.", 5L, 5, 500);

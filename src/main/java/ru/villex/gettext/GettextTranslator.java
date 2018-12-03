@@ -41,6 +41,11 @@ public class GettextTranslator implements Gettextable {
     }
 
     @Override
+    public String _(String lang, String key) {
+        return _(Locale.forLanguageTag(lang), key, null);
+    }
+
+    @Override
     public String _(Locale locale, String key) {
         return _(locale, key, null);
     }
@@ -55,6 +60,11 @@ public class GettextTranslator implements Gettextable {
         } else {
             return String.format(tr, args);
         }
+    }
+
+    @Override
+    public String _n(String lang, String key, long num, Object... args) {
+        return _n(Locale.forLanguageTag(lang), new String[]{key}, num, args);
     }
 
     @Override
