@@ -52,7 +52,7 @@ public class GettextTranslator implements Gettextable {
 
     @Override
     public String _(String lang, String key, Object... args) {
-        return _(Locale.forLanguageTag(lang), key, null);
+        return _(Locale.forLanguageTag(lang), key, args);
     }
 
     @Override
