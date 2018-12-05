@@ -13,6 +13,8 @@ public interface Gettextable {
 
     String _(String lang, String key);
 
+    String _(String lang, String key, Object... args);
+
     String _(Locale locale, String key, Object... args);
 
     String _n(Locale locale, String key, long num, Object... args);

@@ -51,6 +51,11 @@ public class GettextTranslator implements Gettextable {
     }
 
     @Override
+    public String _(String lang, String key, Object... args) {
+        return _(Locale.forLanguageTag(lang), key, null);
+    }
+
+    @Override
     public String _(Locale locale, String key, Object... args) {
         GettextResourceBundle bundle = bundles.get(locale);
         // @TODO сделать дефолтную локаль
