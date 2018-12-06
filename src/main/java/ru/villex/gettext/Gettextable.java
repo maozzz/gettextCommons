@@ -24,4 +24,6 @@ public interface Gettextable {
     String _n(Locale locale, String key, String plural, long num, Object... args);
 
     String _n(Locale locale, String[] forms, long num, Object... args);
+
+    String _n(String lang, String[] forms, long num, Object... args);
 }

@@ -42,22 +42,22 @@ public class GettextTranslator implements Gettextable {
 
     @Override
     public String _(String lang, String key) {
-        return _(Locale.forLanguageTag(lang), key, null);
+        return _(lang, key, null);
     }
 
     @Override
     public String _(Locale locale, String key) {
-        return _(locale, key, null);
-    }
-
-    @Override
-    public String _(String lang, String key, Object... args) {
-        return _(Locale.forLanguageTag(lang), key, args);
+        return _(locale.getLanguage(), key, null);
     }
 
     @Override
     public String _(Locale locale, String key, Object... args) {
-        GettextResourceBundle bundle = bundles.get(locale.getLanguage());
+        return _(locale.getLanguage(), key, args);
+    }
+
+    @Override
+    public String _(String lang, String key, Object... args) {
+        GettextResourceBundle bundle = bundles.get(lang);
         // @TODO сделать дефолтную локаль
         String tr = bundle.getString(key);
         if (useMessageFormat) {
@@ -69,7 +69,7 @@ public class GettextTranslator implements Gettextable {
 
     @Override
     public String _n(String lang, String key, long num, Object... args) {
-        return _n(Locale.forLanguageTag(lang), new String[]{key}, num, args);
+        return _n(lang, new String[]{key}, num, args);
     }
 
     @Override
@@ -84,7 +84,12 @@ public class GettextTranslator implements Gettextable {
 
     @Override
     public String _n(Locale locale, String[] forms, long num, Object... args) {
-        GettextResourceBundle bundle = bundles.get(locale.getLanguage());
+        return _n(locale.getLanguage(), forms, num, args);
+    }
+
+    @Override
+    public String _n(String lang, String[] forms, long num, Object... args) {
+        GettextResourceBundle bundle = bundles.get(lang);
         // @TODO сделать дефолтную локаль
         String tr = bundle.plural(num, forms);
         if (args.length == 0) {
