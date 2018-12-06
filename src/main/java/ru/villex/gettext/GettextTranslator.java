@@ -16,7 +16,7 @@ public class GettextTranslator implements Gettextable {
 
     private boolean useMessageFormat = false;
 
-    Map<Locale, GettextResourceBundle> bundles = new Hashtable<>();
+    Map<String, GettextResourceBundle> bundles = new Hashtable<>();
 
     public GettextTranslator() {
 
@@ -24,12 +24,12 @@ public class GettextTranslator implements Gettextable {
 
     public void setBundles(List<GettextResourceBundle> bundles) {
         for (GettextResourceBundle bundle : bundles) {
-            this.bundles.put(bundle.getLocale(), bundle);
+            this.bundles.put(bundle.getLocale().getLanguage(), bundle);
         }
     }
 
     public void addBundle(GettextResourceBundle bundle) {
-        this.bundles.put(bundle.getLocale(), bundle);
+        this.bundles.put(bundle.getLocale().getLanguage(), bundle);
     }
 
     public boolean isUseMessageFormat() {
@@ -57,7 +57,7 @@ public class GettextTranslator implements Gettextable {
 
     @Override
     public String _(Locale locale, String key, Object... args) {
-        GettextResourceBundle bundle = bundles.get(locale);
+        GettextResourceBundle bundle = bundles.get(locale.getLanguage());
         // @TODO сделать дефолтную локаль
         String tr = bundle.getString(key);
         if (useMessageFormat) {
@@ -84,7 +84,7 @@ public class GettextTranslator implements Gettextable {
 
     @Override
     public String _n(Locale locale, String[] forms, long num, Object... args) {
-        GettextResourceBundle bundle = bundles.get(locale);
+        GettextResourceBundle bundle = bundles.get(locale.getLanguage());
         // @TODO сделать дефолтную локаль
         String tr = bundle.plural(num, forms);
         if (args.length == 0) {
