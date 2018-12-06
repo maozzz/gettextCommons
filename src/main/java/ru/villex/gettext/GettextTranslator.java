@@ -15,6 +15,7 @@ import java.util.Map;
 public class GettextTranslator implements Gettextable {
 
     private boolean useMessageFormat = false;
+    private String defaultLang = "en";
 
     Map<String, GettextResourceBundle> bundles = new Hashtable<>();
 
@@ -57,7 +58,7 @@ public class GettextTranslator implements Gettextable {
 
     @Override
     public String _(String lang, String key, Object... args) {
-        GettextResourceBundle bundle = bundles.get(lang);
+        GettextResourceBundle bundle = bundleFor(lang);
         // @TODO сделать дефолтную локаль
         String tr = bundle.getString(key);
         if (useMessageFormat) {
@@ -89,7 +90,7 @@ public class GettextTranslator implements Gettextable {
 
     @Override
     public String _n(String lang, String[] forms, long num, Object... args) {
-        GettextResourceBundle bundle = bundles.get(lang);
+        GettextResourceBundle bundle = bundleFor(lang);
         // @TODO сделать дефолтную локаль
         String tr = bundle.plural(num, forms);
         if (args.length == 0) {
@@ -100,5 +101,18 @@ public class GettextTranslator implements Gettextable {
         } else {
             return String.format(tr, args);
         }
+    }
+
+    private GettextResourceBundle bundleFor(String lang) {
+        if (!bundles.containsKey(lang)) lang = defaultLang;
+        return bundles.get(lang);
+    }
+
+    public void setDefaultLang(String defaultLang) {
+        this.defaultLang = defaultLang;
+    }
+
+    public void setDefaultLang(Locale locale) {
+        this.defaultLang = locale.getLanguage();
     }
 }
