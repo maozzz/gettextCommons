@@ -1,2 +1,4 @@
-./.idea
 ./gettextCommons.iml
+/gettextTranslator-commons.iml
+.idea/
+gettextTranslator-commons.iml
