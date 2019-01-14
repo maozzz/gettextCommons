@@ -45,7 +45,9 @@ public class ExpressionPlurable implements Plurable {
         try {
             String className = "Plurable";
             // create an empty source file
+            Logger.getLogger(ExpressionPlurable.class.getSimpleName()).severe("Creating class for plurable");
             File sourceFile = File.createTempFile(className, ".java");
+            Logger.getLogger(ExpressionPlurable.class.getSimpleName()).severe("Creating class for plurable");
             sourceFile.deleteOnExit();
 
             // generate the source code, using the source filename as the class name
@@ -58,8 +60,10 @@ public class ExpressionPlurable implements Plurable {
                     + "} ";
 
             FileWriter writer = new FileWriter(sourceFile);
+            Logger.getLogger(ExpressionPlurable.class.getSimpleName()).severe("Writing class for plurable");
             writer.write(sourceCode);
             writer.close();
+            Logger.getLogger(ExpressionPlurable.class.getSimpleName()).severe("Writed! Compile...");
 
             // compile the source file
             JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
@@ -69,12 +73,14 @@ public class ExpressionPlurable implements Plurable {
             Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromFiles(Arrays.asList(sourceFile));
             compiler.getTask(null, fileManager, null, null, null, compilationUnits).call();
             fileManager.close();
+            Logger.getLogger(ExpressionPlurable.class.getSimpleName()).severe("Loading compiled class.");
 
             // load the compiled class
             URLClassLoader classLoader = URLClassLoader.newInstance(new URL[]{parentDirectory.toURI().toURL()});
             Class<?> plurable = classLoader.loadClass(className);
 
             // return instance
+            Logger.getLogger(ExpressionPlurable.class.getSimpleName()).severe("Plurable ready");
             return (Plurable) plurable.newInstance();
         } catch (Exception ex) {
             ex.printStackTrace();
