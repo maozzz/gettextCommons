@@ -8,6 +8,8 @@ import java.io.FileWriter;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -81,7 +83,11 @@ public class ExpressionPlurable implements Plurable {
             Logger.getLogger(ExpressionPlurable.class.getSimpleName()).severe("Loading compiled class.");
 
             // load the compiled class
-            URLClassLoader classLoader = URLClassLoader.newInstance(new URL[]{parentDirectory.toURI().toURL()}, ClassLoader.getSystemClassLoader());
+            URL[] urLs = ((URLClassLoader) (Thread.currentThread().getContextClassLoader())).getURLs();
+            List<URL> urls = Arrays.asList(urLs);
+            urls.add(parentDirectory.toURI().toURL());
+            URL[] urls1 = urls.stream().toArray(URL[]::new);
+            URLClassLoader classLoader = URLClassLoader.newInstance(urls1, ClassLoader.getSystemClassLoader());
             Class<?> plurable = classLoader.loadClass(className);
 
             // return instance
