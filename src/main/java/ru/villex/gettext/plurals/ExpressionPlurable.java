@@ -77,7 +77,8 @@ public class ExpressionPlurable implements Plurable {
             // return instance
             return (Plurable) plurable.newInstance();
         } catch (Exception ex) {
-            Logger.getLogger(ExpressionPlurable.class.getSimpleName()).severe(ex.getMessage());
+            ex.printStackTrace();
+            Logger.getLogger(ExpressionPlurable.class.getSimpleName()).severe("Creating plurable for expr: " + expression);
             return new ExpressionPlurable(expression);
         }
     }
