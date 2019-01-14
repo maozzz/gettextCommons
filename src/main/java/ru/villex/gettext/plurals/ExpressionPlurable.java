@@ -41,6 +41,11 @@ public class ExpressionPlurable implements Plurable {
 
 
     public static Plurable generatePlurableClass(String expression) {
+        try {
+            ClassLoader.getSystemClassLoader().loadClass("ru.villex.gettext.plurals.Plurable");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 
         try {
             String className = "Plurable";
