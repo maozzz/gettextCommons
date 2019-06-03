@@ -60,7 +60,7 @@ public class GettextTranslator implements Gettextable {
     public String _(String lang, String key, Object... args) {
         GettextResourceBundle bundle = bundleFor(lang);
         // @TODO сделать дефолтную локаль
-        String tr = bundle.getString(key);
+        String tr = bundle.containsKey(key) ? bundle.getString(key) : key;
         if (useMessageFormat) {
             return MessageFormat.format(tr, args);
         } else {
