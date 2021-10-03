@@ -6,7 +6,7 @@
 
     <groupId>ru.villex</groupId>
     <artifactId>gettextTranslator-commons</artifactId>
-    <version>2.0-RELEASE</version>
+    <version>2.1-RELEASE</version>
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
