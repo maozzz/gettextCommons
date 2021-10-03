@@ -19,11 +19,13 @@ import java.util.Locale;
 public class GettextTest extends TestCase {
 
     private static final String testFiles = "/languages/%s/default.mo";
-    private String[] locales = {"en", "ru", "el"};
+    private String[] locales = {"en", "ru", "el", "zh", "tw"};
 
     private Locale ru = Locale.forLanguageTag("ru");
     private Locale en = Locale.forLanguageTag("en");
     private Locale el = Locale.forLanguageTag("el");
+    private Locale zh = Locale.forLanguageTag("zh");
+    private Locale tw = Locale.forLanguageTag("tw");
 
 
     @Test
@@ -56,5 +58,22 @@ public class GettextTest extends TestCase {
         t = translator._n(ru, "Join <a href=\"%s\" class=\"link-def\">MyWed Pro Professionals Club</a><br> and upload up to %s photo per week! And that is not all:", 23L, "https://ya.ru", 23);
         System.out.println(t);
         assertEquals(t, "Вступайте в <a href=\"https://ya.ru\" class=\"link-def\">Клуб профессионалов MyWed Pro</a><br> и загружайте по 23 фотографии в неделю! И это еще не все:");
+    }
+
+    @Test
+    public void testParseChinese() throws IOException {
+        GettextTranslator translator = new GettextTranslator();
+
+        MoParser parser = new MoParser();
+        for (String locale : locales) {
+            InputStream res = getClass().getResourceAsStream(String.format(testFiles, locale));
+            GettextResourceBundle bundle = new GettextResourceBundle(parser.read(res));
+            translator.addBundle(bundle);
+        }
+        String t = translator._(tw.getLanguage(), "About us");
+        assertEquals(t, "關於我們");
+
+        t = translator._(zh.getLanguage(), "About us");
+        assertEquals(t, "关于我们");
     }
 }

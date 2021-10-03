@@ -2,7 +2,10 @@ package ru.villex.gettext;
 
 import ru.villex.gettext.plurals.Plurable;
 
-import java.util.*;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import static ru.villex.gettext.plurals.ExpressionPlurable.generatePlurableClass;
 
@@ -94,9 +97,9 @@ public class GettextResourceBundle extends ResourceBundle implements Gettextable
                     if ("zh".equals(language)) {
                         // смотрим в заголовок X-Crowdin-Language
                         for (String head : headers) {
-                            String[] subSplits = header.split(":");
+                            String[] subSplits = head.split(":");
                             if (subSplits.length > 1 && subSplits[1].length() > 0
-                            && subSplits[0].trim().toLowerCase().equals("x-crowdin-language")) {
+                                    && subSplits[0].trim().toLowerCase().equals("x-crowdin-language")) {
                                 if (subSplits[1].trim().toLowerCase().contains("tw")) {
                                     language = "tw";
                                 }
