@@ -129,7 +129,7 @@ public class MoParser {
                 entry.setTr(parseElement(temp));
             }
             if (numberOfStrings != entries.size())
-                Logger.getLogger("MoParser").severe("Etries must be: " + this.numberOfStrings + ", parsed: " + entries.size());
+                Logger.getLogger("MoParser").severe("Entries must be: " + this.numberOfStrings + ", parsed: " + entries.size());
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         } finally {
@@ -157,19 +157,40 @@ public class MoParser {
 
         for (byte b : input) {
             if (b == delim) {
-                strings.add(new String(bs.toByteArray()));
+                String value = new String(bs.toByteArray()).trim();
+
+                // Проверяем на контекст (msgctxt), разделитель контекста — \u0004
+                if (value.contains("\u0004")) {
+                    String[] parts = value.split("\u0004", 2);
+                    value = parts.length > 1 ? parts[1] : "";  // Берём только строку после контекста
+                }
+
+                if (!value.isEmpty()) {
+                    strings.add(value);
+                }
                 bs.reset();
                 continue;
             }
             bs.write(b);
         }
-        String[] strs = new String[strings.size()];
-        return strings.toArray(strs);
+
+        // Обрабатываем последнюю строку, если она не msgctxt
+        String lastValue = new String(bs.toByteArray()).trim();
+        if (lastValue.contains("\u0004")) {
+            String[] parts = lastValue.split("\u0004", 2);
+            lastValue = parts.length > 1 ? parts[1] : "";
+        }
+        if (!lastValue.isEmpty()) {
+            strings.add(lastValue);
+        }
+
+        return strings.toArray(new String[0]);
     }
+
 
     /**
      * Если использовать InputStream::read(buff) - то он может не полностью заполнять его данными,
-     * если они еще не готовы. Поэтому читаю по одному и заполняю буфер вручну.
+     * если они еще не готовы. Поэтому читаю по одному и заполняю буфер вручную.
      *
      * @param buff
      * @param is
