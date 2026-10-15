@@ -23,7 +23,7 @@ public class GettextTest {
 
     private final Locale ru = Locale.forLanguageTag("ru");
     private final Locale en = Locale.forLanguageTag("en");
-    private final Locale el = Locale.forLanguageTag("el");
+//    private final Locale el = Locale.forLanguageTag("el");
     private final Locale zh = Locale.forLanguageTag("zh");
     private final Locale tw = Locale.forLanguageTag("tw");
 
