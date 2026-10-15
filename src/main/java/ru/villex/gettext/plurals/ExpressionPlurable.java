@@ -2,12 +2,7 @@ package ru.villex.gettext.plurals;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
-import javax.tools.*;
-import java.io.File;
-import java.io.FileWriter;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.Arrays;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -18,8 +13,22 @@ import java.util.logging.Logger;
  */
 public class ExpressionPlurable implements Plurable {
 
-    private static final ScriptEngine js = new ScriptEngineManager().getEngineByName("js");
-    private String expression;
+    private static final Logger LOG = Logger.getLogger(ExpressionPlurable.class.getSimpleName());
+    private static final ScriptEngine js = createScriptEngine();
+    private final String expression;
+
+    private static ScriptEngine createScriptEngine() {
+        ScriptEngine engine = new ScriptEngineManager().getEngineByName("js");
+        if (engine == null) {
+            // A server thread's context class loader may not see the engine provider.
+            engine = new ScriptEngineManager(ExpressionPlurable.class.getClassLoader()).getEngineByName("js");
+        }
+        if (engine == null) {
+            LOG.warning("JavaScript engine 'js' is unavailable; plural forms cannot be evaluated. Java version: "
+                    + System.getProperty("java.version"));
+        }
+        return engine;
+    }
 
     public ExpressionPlurable(String expression) {
         this.expression = expression;
@@ -27,14 +36,21 @@ public class ExpressionPlurable implements Plurable {
 
     @Override
     public int pluralEval(long n) {
+        if (js == null) {
+            return 0;
+        }
         try {
-            Object eval = js.eval("n=" + n + ";" + expression);
-            if (eval instanceof Boolean) {
-                return (Boolean) eval ? 1 : 0;
-            } else {
-                return (Integer) eval;
+            // All languages share this engine and its global variable n.
+            synchronized (js) {
+                Object eval = js.eval("n=" + n + ";" + expression);
+                if (eval instanceof Boolean) {
+                    return (Boolean) eval ? 1 : 0;
+                } else {
+                    return ((Number) eval).intValue();
+                }
             }
         } catch (Exception e) {
+            LOG.log(Level.WARNING, "Cannot evaluate plural expression '" + expression + "' for n=" + n, e);
             return 0;
         }
     }
@@ -83,8 +99,8 @@ public class ExpressionPlurable implements Plurable {
 //            return (Plurable) plurable.newInstance();
 //        } catch (Exception ex) {
 //            ex.printStackTrace();
-            Logger.getLogger(ExpressionPlurable.class.getSimpleName()).info("Creating plurable for expr: " + expression);
-            return new ExpressionPlurable(expression);
+        LOG.info("Creating plurable for expr: " + expression);
+        return new ExpressionPlurable(expression);
 //        }
     }
 }
